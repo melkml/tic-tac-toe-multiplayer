@@ -1,44 +1,14 @@
-import {
-    announceResult,
-    Board,
-    finalResult,
-    firstPlayer,
-    human,
-    initMatch,
-    move,
-    Player,
-    printBoard,
-    Result,
-    togglePlayer
-} from "../libs";
+import { Peer } from "./class";
 
-let currentPlayer: Player = firstPlayer();
-let chosenMove: number[] | number | null;
-let result: false | Result = false;
+require("dotenv").config();
 
-let currentBoard: Board = initMatch();
-
-console.log("JOGO DA VELHA\n\n");
-
-while (!result) {
-        console.log(`Jogador atual: ${currentPlayer}`);
-        printBoard(currentBoard);
-        chosenMove = human(currentBoard);
-
-        if (chosenMove) {
-            currentBoard = move(currentBoard, currentPlayer, chosenMove);
-        } else {
-            console.log("Posição está ocupada.");
-            continue;
-        }
-
-    result = finalResult(currentBoard);
-
-    currentPlayer = togglePlayer(currentPlayer);
+if (!process.env.PORT) {
+  throw Error("Variável de ambiente PORT não informada");
 }
+const port = process.env.PORT;
 
-if (result !== Result.TIE) {
-    printBoard(currentBoard);
-}
+const peer = new Peer(port);
 
-announceResult(result);
+process.argv
+  .slice(2)
+  .forEach((anotherPeerAddress) => peer.connectTo(anotherPeerAddress));
