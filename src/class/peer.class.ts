@@ -39,7 +39,7 @@ export class Peer {
     socket.on("data", (data) => match.opponentMove(data, this));
   }
 
-  onData(data: any) {
+  sendMove(data: any) {
     this.connection.forEach((socket) => socket.write(data.toString()));
   }
 }
